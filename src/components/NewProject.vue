@@ -244,7 +244,7 @@ export default {
   background-color: #F4F2FF;
   border-radius: 8px;
   max-width: 600px;
-  height: 100vh;
+  height: 100%;
   padding: 2rem;
 }
 
