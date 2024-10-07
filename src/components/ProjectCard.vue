@@ -1,22 +1,26 @@
 <template>
-    <div class="card">
-      <div class="card-image" :style="{ backgroundImage: `url(${project.imageUrl})` }"></div>
-      <div class="card-content">
-        <div class="card-header">
-          <span class="card-title">{{ project.name }}</span>
-          <div class="card-actions">
-            <button class="favorite-btn" @click="toggleFavorite">{{ isFavorite ? '⭐' : '☆' }}</button>
-            <button class="actions-btn">⋯</button>
-          </div>
-        </div>
-        <div class="card-client">{{ project.client }}</div>
-        <div class="card-divider"></div>
-        <div class="card-dates">
-          <span class="calendar-icon">📅</span> {{ project.date }}
+  <div class="card">
+    <div
+      class="card-image"
+      :style="{ backgroundImage: `url(${project?.imageUrl})` }"
+    ></div>
+    <div class="card-content">
+      <div class="card-header">
+        <span class="card-title">{{ project?.name }}</span>
+        <div class="card-actions">
+          <button class="favorite-btn" @click="toggleFavorite">{{ isFavorite ? '⭐' : '☆' }}</button>
+          <button class="actions-btn">⋯</button>
         </div>
       </div>
+      <div class="card-client">{{ project?.client }}</div>
+      <div class="card-divider"></div>
+      <div class="card-dates">
+        <span class="calendar-icon">📅</span> {{ project?.date }}
+      </div>
     </div>
+  </div>
 </template>
+
   
 <script>
   export default {

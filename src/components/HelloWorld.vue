@@ -3,11 +3,11 @@
     <div class="content-wrapper d-flex flex-column align-items-center justify-content-center">
       <div class="no-project">Nenhum Projeto</div>
       <div class="instruction">Clique no botão abaixo para criar o primeiro e gerenciá-lo.</div>
-      <button class="add-project-btn d-flex align-items-center justify-content-center">
+      <button @click="goToNewProject" class="add-project-btn d-flex align-items-center justify-content-center">
         <svg class="btn-background" xmlns="http://www.w3.org/2000/svg" width="230" height="52" viewBox="0 0 230 52" fill="none">
           <path d="M0 26C0 11.6406 11.6406 0 26 0H204C218.359 0 230 11.6406 230 26C230 40.3594 218.359 52 204 52H26C11.6406 52 0 40.3594 0 26Z" fill="#695CCD"/>
         </svg>
-        <i class="bi bi-plus-circle add-icon"></i> <!-- Ícone Bootstrap -->
+        <i class="bi bi-plus-circle add-icon"></i> 
         <span class="btn-text">Novo Projeto</span>
       </button>
     </div>
@@ -22,10 +22,14 @@ export default defineComponent({
   props: {
     msg: String,
   },
+  methods: {
+    goToNewProject() {
+      this.$router.push({ name: 'NewProject' });
+    },
+  },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .hello {
   width: 100vw;
@@ -33,8 +37,6 @@ export default defineComponent({
   background-color: #F4F2FF;
   border-radius: 4px;
 }
-
-
 .content-wrapper {
   background-color: white; 
   border-radius: 8px;

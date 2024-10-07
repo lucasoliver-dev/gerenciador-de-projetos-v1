@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import HomeView from './views/HomeView.vue';
+import TopBar from './components/TopBar.vue';
+
 </script>
 
 <template>
-  <HomeView></HomeView>
+  <router-view></router-view>
 </template>
 
 <style>

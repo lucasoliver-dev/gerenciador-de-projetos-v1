@@ -1,108 +1,102 @@
 <template>
-    <div class="toolbar">
-      <div class="toolbar-content d-flex justify-content-between align-items-center">
-        <div class="project-info">
-          <h2>Projetos ({{ totalProjects }})</h2>
-        </div>
-        <div class="filters d-flex align-items-center">
-          <button class="btn btn-toggle-favorites" @click="toggleFavorites">
-            <span v-if="showFavorites">Mostrar Todos</span>
-            <span v-else>Mostrar Favoritos</span>
-          </button>
-          
-          <select v-model="sortOption" @change="sortProjects">
-            <option value="alphabetical">Ordem Alfabética</option>
-            <option value="recent">Iniciados Recentemente</option>
-            <option value="dueSoon">Próximos ao Prazo</option>
-          </select>
-  
-          <button class="btn btn-new-project" @click="createNewProject">
-            Novo Projeto
-          </button>
-        </div>
+    <div class="tool-bar">
+      <input type="text" v-model="searchTerm" @input="searchProjects" placeholder="Buscar projetos..." />
+      <button @click="clearSearch">Limpar</button>
+      
+      <div v-if="searchHistory.length" class="search-history">
+        <h4>Histórico de buscas:</h4>
+        <ul>
+          <li v-for="(term, index) in searchHistory" :key="index">
+            <button @click="selectSearchTerm(term)">{{ term }}</button>
+          </li>
+        </ul>
       </div>
     </div>
   </template>
   
-  <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  
-  export default defineComponent({
-    name: 'ToolBar',
-    props: {
-      totalProjects: {
-        type: Number,
-        required: true,
+  <script>
+  export default {
+    data() {
+      return {
+        searchTerm: '',
+        searchHistory: [],
+      };
+    },
+    created() {
+      // Carregar o histórico do localStorage
+      const storedHistory = localStorage.getItem('searchHistory');
+      if (storedHistory) {
+        this.searchHistory = JSON.parse(storedHistory);
       }
     },
-    setup() {
-      const showFavorites = ref(false);
-      const sortOption = ref<string>('alphabetical');
-  
-      const toggleFavorites = () => {
-        showFavorites.value = !showFavorites.value;
-      };
-  
-      const sortProjects = () => {
-        // Lógica para ordenar os projetos baseado na opção escolhida
-        if (sortOption.value === 'alphabetical') {
-          // Ordenar alfabeticamente
-        } else if (sortOption.value === 'recent') {
-          // Ordenar pelos mais recentes
-        } else if (sortOption.value === 'dueSoon') {
-          // Ordenar pelos projetos mais próximos da data de finalização
+    methods: {
+      searchProjects() {
+        // Se o termo de busca não estiver vazio, adiciona ao histórico
+        if (this.searchTerm.trim()) {
+          this.addToSearchHistory(this.searchTerm);
+          // Disparar evento de busca para outros componentes escutarem
+          this.$emit('search', this.searchTerm);
         }
-      };
+      },
+      addToSearchHistory(term) {
+        // Remover duplicatas
+        const existingIndex = this.searchHistory.indexOf(term);
+        if (existingIndex !== -1) {
+          this.searchHistory.splice(existingIndex, 1);
+        }
+        
+        // Adicionar ao início do array
+        this.searchHistory.unshift(term);
   
-      const createNewProject = () => {
-        // Lógica para criar um novo projeto
-        console.log('Criar novo projeto');
-      };
+        // Limitar a 5 termos
+        if (this.searchHistory.length > 5) {
+          this.searchHistory.pop();
+        }
   
-      return {
-        showFavorites,
-        sortOption,
-        toggleFavorites,
-        sortProjects,
-        createNewProject,
-      };
-    }
-  });
+        // Atualizar localStorage
+        localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
+      },
+      selectSearchTerm(term) {
+        this.searchTerm = term;
+        this.searchProjects();
+      },
+      clearSearch() {
+        this.searchTerm = '';
+        this.$emit('search', '');
+      },
+    },
+  };
   </script>
   
   <style scoped>
-  .toolbar {
+  .tool-bar {
+    display: flex;
+    flex-direction: column;
     padding: 20px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
   }
-  
-  .toolbar-content {
-    max-width: 1200px;
-    margin: 0 auto;
+  input {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
   }
-  
-  .project-info h2 {
-    font-size: 24px;
-    font-weight: 500;
+  .search-history {
+    margin-top: 10px;
   }
-  
-  .filters select {
-    margin-left: 15px;
-    padding: 5px 10px;
+  .search-history h4 {
+    margin-bottom: 5px;
   }
-  
-  .btn-toggle-favorites {
-    margin-right: 15px;
+  .search-history ul {
+    list-style-type: none;
+    padding: 0;
   }
-  
-  .btn-new-project {
-    margin-left: 20px;
-    padding: 8px 15px;
+  .search-history li {
+    margin-bottom: 5px;
+  }
+  button {
     background-color: #695ccd;
     color: white;
+    padding: 5px 10px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
   }
   </style>
