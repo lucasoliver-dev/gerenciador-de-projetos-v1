@@ -9,10 +9,10 @@
           <h3 class="page-title">Novo Projeto</h3>
         </div>
       </div>
-      <div class="content-container">
-        <div class="container-form d-flex justify-content-center">
+      <div class="content-container col-12">
+        <div class="container-form d-flex justify-content-center col-12">
           <!-- Formulário dentro do container -->
-          <div class="form-wrapper d-flex justify-content-start">
+          <div class="form-wrapper d-flex justify-content-start col-12">
             <form @submit.prevent="submitForm" class="form-content col-12">
               <!-- Nome do Projeto -->
               <div class="form-group">
@@ -243,7 +243,7 @@ export default {
 .form-wrapper {
   background-color: #F4F2FF;
   border-radius: 8px;
-  width: 40vw;
+  max-width: 600px;
   height: 100vh;
   padding: 2rem;
 }
