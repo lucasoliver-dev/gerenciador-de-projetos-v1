@@ -13,7 +13,7 @@
         <div class="container-form d-flex justify-content-center">
           <!-- Formulário dentro do container -->
           <div class="form-wrapper d-flex justify-content-start">
-            <form @submit.prevent="submitForm" class="form-content">
+            <form @submit.prevent="submitForm" class="form-content col-12">
               <!-- Nome do Projeto -->
               <div class="form-group">
                 <label class="custom-label" :class="{ 'error-label': errors.name }" for="name">
@@ -43,7 +43,7 @@
                 <span v-if="errors.client" class="invalid-feedback">{{ errors.client }}</span>
               </div>
               <!-- Data de Início e Data Final -->
-              <div class="form-group row">
+              <div class="form-group row col-12">
                 <div class="col-sm-6">
                   <label class="custom-label" :class="{ 'error-label': errors.name }" for="startDate">
                     Data de Início
