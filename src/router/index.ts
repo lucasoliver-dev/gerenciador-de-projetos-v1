@@ -4,6 +4,7 @@ import ProjectCard from '@/components/ProjectCard.vue';
 import ProjectList from '@/components/ProjectList.vue';
 import EditProject from '@/components/EditProject.vue';
 import AddNewProject from '@/views/AddNewProject.vue';
+import AddProjectList from '@/views/AddProjectList.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -15,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/new-project',
     name: 'NewProject',
     component: AddNewProject,
+  },
+  {
+    path: '/add-project-list',
+    name: 'AddProjectList',
+    component: AddProjectList,
   },
   {
     path: '/projects',

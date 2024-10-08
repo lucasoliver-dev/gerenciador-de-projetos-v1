@@ -1,108 +1,92 @@
 <template>
   <container class="master-container">
-      <div class="page-container d-flex flex-column justify-content-center align-items-start">
-        <!-- Botão de voltar -->
-        <div class="first-content d-flex flex-column justify-content-center align-items-start mt-4">
-          <button @click="goBack" class="back-btn">
-            ← Voltar
-          </button>
-          <h3 class="page-title">Novo Projeto</h3>
-        </div>
+    <div class="page-container d-flex flex-column justify-content-center align-items-start">
+      <!-- Botão de voltar -->
+      <div class="first-content d-flex flex-column justify-content-center align-items-start mt-4">
+        <button @click="goBack" class="back-btn">
+          ← Voltar
+        </button>
+        <h3 class="page-title">Novo Projeto</h3>
       </div>
-      <div class="content-container col-12">
-        <div class="container-form d-flex justify-content-center col-12">
-          <!-- Formulário dentro do container -->
-          <div class="form-wrapper d-flex justify-content-start col-12">
-            <form @submit.prevent="submitForm" class="form-content col-12">
-              <!-- Nome do Projeto -->
-              <div class="form-group">
-                <label class="custom-label" :class="{ 'error-label': errors.name }" for="name">
-                  Nome do Projeto
+    </div>
+    <div class="content-container col-12">
+      <div class="container-form d-flex justify-content-center col-12">
+        <!-- Formulário dentro do container -->
+        <div class="form-wrapper d-flex justify-content-start col-12">
+          <form @submit.prevent="submitForm" class="form-content col-12">
+            <!-- Nome do Projeto -->
+            <div class="form-group">
+              <label class="custom-label" :class="{ 'error-label': errors.name }" for="name">
+                Nome do Projeto
+                <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
+              </label>
+              <input type="text" v-model="form.name" :class="['form-control', { 'error-input': errors.name }]"
+                id="name" />
+              <span v-if="errors.name" class="invalid-feedback">{{ errors.name }}</span>
+            </div>
+            <!-- Cliente -->
+            <div class="form-group">
+              <label class="custom-label" :class="{ 'error-label': errors.name }" for="client">
+                Cliente
+                <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
+              </label>
+              <input type="text" v-model="form.client" :class="['form-control', { 'error-input': errors.client }]"
+                id="client" />
+              <span v-if="errors.client" class="invalid-feedback">{{ errors.client }}</span>
+            </div>
+            <!-- Data de Início e Data Final -->
+            <div class="form-group row col-12">
+              <div class="col-sm-6">
+                <label class="custom-label" :class="{ 'error-label': errors.name }" for="startDate">
+                  Data de Início
                   <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
                 </label>
-                <input
-                  type="text"
-                  v-model="form.name"
-                  :class="['form-control', { 'error-input': errors.name }]"
-                  id="name"
-                />
-                <span v-if="errors.name" class="invalid-feedback">{{ errors.name }}</span>
+                <input type="date" v-model="form.startDate"
+                  :class="['form-control', { 'error-input': errors.startDate }]" id="startDate" />
+                <span v-if="errors.startDate" class="invalid-feedback">{{ errors.startDate }}</span>
               </div>
-              <!-- Cliente -->
-              <div class="form-group">
-                <label class="custom-label" :class="{ 'error-label': errors.name }" for="client">
-                  Cliente
-                  <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
-                </label>
-                <input
-                  type="text"
-                  v-model="form.client"
-                  :class="['form-control', { 'error-input': errors.client }]"
-                  id="client"
-                />
-                <span v-if="errors.client" class="invalid-feedback">{{ errors.client }}</span>
-              </div>
-              <!-- Data de Início e Data Final -->
-              <div class="form-group row col-12">
-                <div class="col-sm-6">
-                  <label class="custom-label" :class="{ 'error-label': errors.name }" for="startDate">
-                    Data de Início
-                    <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
-                  </label>
-                  <input
-                    type="date"
-                    v-model="form.startDate"
-                    :class="['form-control', { 'error-input': errors.startDate }]"
-                    id="startDate"
-                  />
-                  <span v-if="errors.startDate" class="invalid-feedback">{{ errors.startDate }}</span>
-                </div>
 
-                <div class="col-sm-6">
-                  <label class="custom-label" :class="{ 'error-label': errors.name }" for="endDate">
-                    Data Final
-                    <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
-                  </label>
-                  <input
-                    type="date"
-                    v-model="form.endDate"
-                    :class="['form-control', { 'error-input': errors.endDate }]"
-                    id="endDate"
-                  />
-                  <span v-if="errors.endDate" class="invalid-feedback">{{ errors.endDate }}</span>
-                </div>
-              </div>
-              <!-- Capa do Projeto -->
-              <div class="form-group">
-                <label class="custom-label" :class="{ 'error-label': errors.name }" for="image">
-                  Capa do Projeto
+              <div class="col-sm-6">
+                <label class="custom-label" :class="{ 'error-label': errors.name }" for="endDate">
+                  Data Final
                   <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
                 </label>
-                <div class="upload-wrapper">
-                  <div class="upload-icon">
-                    <i class="bi bi-upload" style="font-size: 24px;"></i>
-                  </div>
-                  <div class="upload-message">
-                    Escolha uma imagem .jpg ou .png no seu dispositivo
-                  </div>
-                  <div class="upload-button">
-                    <button class="custom-upload-btn" @click="triggerFileInput">
-                      Selecionar Imagem
-                    </button>
-                  </div>
-                  <img v-if="imagePreview" :src="imagePreview" alt="Preview da imagem" class="image-preview" />
-                </div>
-                <input type="file" id="image" @change="handleFileChange" class="d-none" />
-                <span v-if="errors.image" class="invalid-feedback">{{ errors.image }}</span>
+                <input type="date" v-model="form.endDate" :class="['form-control', { 'error-input': errors.endDate }]"
+                  id="endDate" />
+                <span v-if="errors.endDate" class="invalid-feedback">{{ errors.endDate }}</span>
               </div>
-              <button type="submit" class="submit-btn btn-primary">
-                Salvar Projeto
-              </button>
-            </form>
-          </div>
+            </div>
+            <!-- Capa do Projeto -->
+            <div class="form-group">
+              <label class="custom-label" :class="{ 'error-label': errors.name }" for="image">
+                Capa do Projeto
+                <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
+              </label>
+              <div class="upload-wrapper">
+                <div class="upload-icon">
+                  <i class="bi bi-upload" style="font-size: 24px;"></i>
+                </div>
+                <div class="upload-message">
+                  Escolha uma imagem .jpg ou .png no seu dispositivo
+                </div>
+                <div class="upload-button">
+                  <button class="custom-upload-btn" @click="triggerFileInput">
+                    Selecionar Imagem
+                  </button>
+                </div>
+                <img v-if="imagePreview" :src="imagePreview" alt="Preview da imagem" class="image-preview" />
+              </div>
+              <input type="file" id="image" @change="handleFileChange" class="d-none" />
+              <span v-if="errors.image" class="invalid-feedback">{{ errors.image }}</span>
+            </div>
+            <button type="submit" class="submit-btn btn-primary">
+              Salvar Projeto
+            </button>
+          </form>
         </div>
       </div>
-  </container>  
+    </div>
+  </container>
 </template>
 
 <script>
@@ -126,12 +110,14 @@ export default {
     handleFileChange(event) {
       const selectedFile = event.target.files[0];
       this.form.image = selectedFile;
+
       if (selectedFile) {
-      this.imagePreview = URL.createObjectURL(selectedFile);
+        this.imagePreview = URL.createObjectURL(selectedFile);
       } else {
-        this.imagePreview = null; 
+        this.imagePreview = null;
       }
     },
+
     async submitForm() {
       const schema = yup.object().shape({
         name: yup.string().required('Nome do Projeto é obrigatório'),
@@ -155,27 +141,45 @@ export default {
         this.$store.dispatch('addProject', {
           ...this.form,
           id: Date.now(),
+          imageUrl: this.imagePreview,
         });
-        this.$router.push({ name: 'ProjectList' });
+
+        this.$router.push({ name: 'AddProjectList' });
+        this.form = {
+          name: '',
+          client: '',
+          startDate: '',
+          endDate: '',
+          image: null,
+        };
+        this.imagePreview = null;
+
       } catch (err) {
-        this.errors = err.inner.reduce((acc, error) => {
-          acc[error.path] = error.message;
-          return acc;
-        }, {});
+        if (err.inner) {
+          this.errors = err.inner.reduce((acc, error) => {
+            acc[error.path] = error.message;
+            return acc;
+          }, {});
+        } else {
+          console.error('Erro inesperado:', err);
+          this.errors = { general: 'Ocorreu um erro inesperado. Por favor, tente novamente.' };
+        }
       }
     },
+
     goBack() {
       this.$router.push({ name: 'home' });
     },
+
     triggerFileInput() {
       document.getElementById('image').click();
     },
-  },
+  }
 };
 </script>
 
 <style scoped>
-.master-container{
+.master-container {
   height: 100vh;
   background-color: #6c757d;
 }
@@ -310,20 +314,20 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 30vh; 
+  height: 30vh;
   border: 1px dotted #695CCD;
   padding: 10px;
   border-radius: 10px;
-  position: relative; 
-  overflow: hidden; 
+  position: relative;
+  overflow: hidden;
 }
 
 .image-preview {
-  position: absolute; 
-  top: 0; 
+  position: absolute;
+  top: 0;
   left: 0;
-  width: 100%; 
-  height: 100%; 
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
