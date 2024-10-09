@@ -1,7 +1,6 @@
 <template>
   <div class="master-container">
     <div class="page-container d-flex flex-column justify-content-center align-items-start">
-      <!-- Botão de voltar -->
       <div class="first-content d-flex flex-column justify-content-center align-items-start mt-4">
         <button @click="goBack" class="back-btn">← Voltar</button>
         <h3 class="page-title">Alterar Projeto</h3>
@@ -12,75 +11,43 @@
         <div class="form-wrapper d-flex justify-content-start col-12">
           <form @submit.prevent="submitForm" class="form-content col-12">
             <div class="form-group">
-              <label
-                class="custom-label"
-                :class="{ 'error-label': errors.name }"
-                for="name"
-              >
+              <label class="custom-label" :class="{ 'error-label': errors.name }" for="name">
                 Nome do Projeto
                 <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
               </label>
-              <input
-                type="text"
-                v-model="form.name"
-                :class="['form-control', { 'error-input': errors.name }]"
-                id="name"
-              />
+              <input type="text" v-model="form.name" :class="['form-control', { 'error-input': errors.name }]"
+                id="name" />
               <span v-if="errors.name" class="invalid-feedback">{{ errors.name }}</span>
             </div>
 
             <div class="form-group">
-              <label
-                class="custom-label"
-                :class="{ 'error-label': errors.client }"
-                for="client"
-              >
+              <label class="custom-label" :class="{ 'error-label': errors.client }" for="client">
                 Cliente
                 <span class="mandatory-label" :class="{ 'error-label': errors.client }"> (Obrigatório)</span>
               </label>
-              <input
-                type="text"
-                v-model="form.client"
-                :class="['form-control', { 'error-input': errors.client }]"
-                id="client"
-              />
+              <input type="text" v-model="form.client" :class="['form-control', { 'error-input': errors.client }]"
+                id="client" />
               <span v-if="errors.client" class="invalid-feedback">{{ errors.client }}</span>
             </div>
 
             <div class="form-group row col-12">
               <div class="col-sm-6">
-                <label
-                  class="custom-label"
-                  :class="{ 'error-label': errors.startDate }"
-                  for="startDate"
-                >
+                <label class="custom-label" :class="{ 'error-label': errors.startDate }" for="startDate">
                   Data de Início
                   <span class="mandatory-label" :class="{ 'error-label': errors.startDate }"> (Obrigatório)</span>
                 </label>
-                <input
-                  type="date"
-                  v-model="form.startDate"
-                  :class="['form-control', { 'error-input': errors.startDate }]"
-                  id="startDate"
-                />
+                <input type="date" v-model="form.startDate"
+                  :class="['form-control', { 'error-input': errors.startDate }]" id="startDate" />
                 <span v-if="errors.startDate" class="invalid-feedback">{{ errors.startDate }}</span>
               </div>
 
               <div class="col-sm-6">
-                <label
-                  class="custom-label"
-                  :class="{ 'error-label': errors.endDate }"
-                  for="endDate"
-                >
+                <label class="custom-label" :class="{ 'error-label': errors.endDate }" for="endDate">
                   Data Final
                   <span class="mandatory-label" :class="{ 'error-label': errors.endDate }"> (Obrigatório)</span>
                 </label>
-                <input
-                  type="date"
-                  v-model="form.endDate"
-                  :class="['form-control', { 'error-input': errors.endDate }]"
-                  id="endDate"
-                />
+                <input type="date" v-model="form.endDate" :class="['form-control', { 'error-input': errors.endDate }]"
+                  id="endDate" />
                 <span v-if="errors.endDate" class="invalid-feedback">{{ errors.endDate }}</span>
               </div>
             </div>
@@ -135,10 +102,10 @@ export default defineComponent({
   },
   methods: {
     loadProjectData() {
-      const projectId = this.$route.params.id; // Assume que o ID do projeto está na rota
+      const projectId = this.$route.params.id;
       const projects = JSON.parse(localStorage.getItem('projects')) || [];
       const project = projects.find(p => p.id === parseInt(projectId));
-      
+
       if (project) {
         this.form = { ...project };
         this.imagePreview = project.imageUrl;
@@ -185,8 +152,6 @@ export default defineComponent({
           projects[projectIndex] = { ...this.form, imageUrl: this.imagePreview };
           localStorage.setItem('projects', JSON.stringify(projects));
         }
-
-        // Redireciona para a lista de projetos
         this.$router.push({ name: 'AddProjectList' });
 
       } catch (err) {

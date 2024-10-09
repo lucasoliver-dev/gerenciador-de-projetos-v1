@@ -20,7 +20,7 @@
 export default {
   props: {
     show: Boolean,
-    projectName: String, // Adicionando prop para receber o nome do projeto
+    projectName: String, 
   },
   methods: {
     confirmRemoval() {
@@ -44,7 +44,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Garantindo que a modal esteja acima de outros elementos */
+  z-index: 1000;
 }
 
 .modal-content {
@@ -52,9 +52,9 @@ export default {
   background: white;
   width: 582px;
   height: 321px;
-  border-radius: 8px; /* Todos os cantos arredondados */
-  padding-top: 80px; /* Espaçamento para o círculo flutuante */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  border-radius: 8px;
+  padding-top: 80px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
@@ -62,19 +62,19 @@ export default {
   position: absolute;
   width: 64px;
   height: 64px;
-  background: #695ccd; /* Cor do círculo */
-  border-radius: 50%; /* Círculo perfeito */
-  top: -32px; /* Metade fora da modal */
-  left: calc(50% - 32px); /* Centralizando horizontalmente */
+  background: #695ccd;
+  border-radius: 50%;
+  top: -32px;
+  left: calc(50% - 32px);
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0.9; /* Levemente visível */
+  opacity: 0.9;
 }
 
 .floating-circle i {
-  color: white; /* Ícone de lixeira branco */
-  font-size: 24px; /* Tamanho do ícone */
+  color: white;
+  font-size: 24px;
 }
 
 .modal-title {
@@ -82,16 +82,16 @@ export default {
   font-size: 22px;
   font-weight: 600;
   line-height: 32px;
-  margin: 0; /* Espaçamento em cima e embaixo */
-  color: #1F1283; /* Cor do texto do título */
-  padding: 0; /* Espaçamento interno */
-  border-radius: 4px; /* Arredondando um pouco os cantos do título */
+  margin: 0;
+  color: #1F1283;
+  padding: 0;
+  border-radius: 4px;
 }
 
 .modal-divider {
-  border: 1px solid #8c8b93; /* Divider */
-  width: 80%; /* Define a largura do divider */
-  margin: 10px auto; /* Centraliza o divider e adiciona espaçamento em cima e embaixo */
+  border: 1px solid #8c8b93;
+  width: 80%;
+  margin: 10px auto;
 }
 
 .modal-question {
@@ -99,7 +99,7 @@ export default {
   font-size: 16px;
   font-weight: 400;
   line-height: 22px;
-  margin: 16px 0; /* Espaçamento em cima e embaixo */
+  margin: 16px 0;
 }
 
 .project-name {
@@ -107,38 +107,38 @@ export default {
   font-size: 24px;
   font-weight: 500;
   line-height: 32px;
-  margin: 0; /* Espaçamento em cima e embaixo */
+  margin: 0;
 }
 
 .modal-buttons {
   display: flex;
-  justify-content: center; /* Centraliza os botões */
-  gap: 20px; /* Espaçamento entre os botões */
-  margin-top: 20px; /* Margem superior para os botões */
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 .btn {
   width: 226px;
   height: 52px;
-  border-radius: 26px; /* Arredondando os cantos dos botões */
-  background: #1F1283; /* Cor de fundo do botão */
-  color: white; /* Cor do texto do botão */
-  border: none; /* Sem borda padrão */
-  cursor: pointer; /* Muda o cursor ao passar o mouse */
-  font-weight: bold; /* Texto em negrito */
-  transition: all 0.3s; /* Animação suave */
+  border-radius: 26px;
+  background: #1F1283;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
 }
 
 .btn:hover {
-  background: transparent; /* Fundo transparente ao passar o mouse */
-  border: 1px solid #1F1283; /* Borda ao passar o mouse */
+  background: transparent;
+  border: 1px solid #1F1283;
 }
 
 .btn-confirm {
-  color: white; /* Cor do texto do botão confirmar */
+  color: white;
 }
 
 .btn-cancel {
-  color: white; /* Cor do texto do botão cancelar */
+  color: white;
 }
 </style>

@@ -1,14 +1,13 @@
 <template>
   <div class="card project-card">
-    <div class="card-image"
-      :style="{ backgroundImage: imageUrl ? `url(${imageUrl})` : `url('/defalt.png')` }">
+    <div class="card-image" :style="{ backgroundImage: imageUrl ? `url(${imageUrl})` : `url('/defalt.png')` }">
       <div class="card-actions">
         <button class="favorite-btn" @click="toggleFavorite">
           {{ isFavorite ? '⭐' : '☆' }}
         </button>
         <button class="actions-btn" @click="toggleActionsMenu">⋯</button>
         <div v-if="showActionsMenu" class="actions-menu">
-          <button @click="editProject(project.id)">Editar</button>
+          <button @click="editProject">Editar</button>
           <button @click="confirmDelete">Remover</button>
         </div>
       </div>
@@ -29,28 +28,19 @@
     </div>
 
     <!-- Modal de Confirmação -->
-    <ConfirmModal
-      v-if="showConfirmation"
-      @confirm="deleteProject"
-      @cancel="cancelDelete"
-      :show="showConfirmation"
-      :projectName="project?.name" 
-    />
+    <ConfirmModal v-if="showConfirmation" @confirm="deleteProject" @cancel="cancelDelete" :show="showConfirmation"
+      :projectName="project?.name" />
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import ConfirmModal from './ConfirmModal.vue'; // Importe seu componente de modal
+import ConfirmModal from './ConfirmModal.vue';
 
 export default {
   props: {
     project: {
       type: Object,
-      required: true,
-    },
-    projectId: {  // Adicionando a prop projectId
-      type: String,
       required: true,
     },
   },
@@ -66,39 +56,34 @@ export default {
     };
   },
   mounted() {
-  console.log('Project ID recebido:', this.projectId);
-  if (this.project?.id) {
-    const storedImage = localStorage.getItem(`projectImage_${this.project.id}`);
-    if (storedImage) {
-      this.imageUrl = storedImage;
-    } else if (this.project?.imageUrl) {
-      this.imageUrl = this.project.imageUrl;
+    console.log('Project ID recebido:', this.project.id);
+    if (this.project?.id) {
+      const storedImage = localStorage.getItem(`projectImage_${this.project.id}`);
+      this.imageUrl = storedImage || this.project.imageUrl || null;
+    } else {
+      console.warn('O ID do projeto não está disponível.');
     }
-  } else {
-    console.warn('O ID do projeto não está disponível.');
-  }
-},
+  },
   methods: {
     toggleFavorite() {
       this.isFavorite = !this.isFavorite;
       this.$emit('toggle-favorite', this.project.id, this.isFavorite);
     },
     toggleActionsMenu() {
-      this.showActionsMenu = !this.showActionsMenu; // Alterna a visibilidade do menu de ações
+      this.showActionsMenu = !this.showActionsMenu;
     },
     confirmDelete() {
-      this.showConfirmation = true; // Abre a modal de confirmação
+      this.showConfirmation = true;
     },
     cancelDelete() {
-      this.showConfirmation = false; // Fecha a modal de confirmação
+      this.showConfirmation = false;
     },
-    ...mapActions(['removeProject']), // Mapeia a ação de remoção do Vuex
+    ...mapActions(['removeProject']),
     deleteProject() {
-      this.removeProject(this.project.id); // Chama a ação para remover o projeto
-      this.showConfirmation = false; // Fecha a modal de confirmação
+      this.removeProject(this.project.id);
+      this.showConfirmation = false;
     },
     editProject() {
-      // Lógica para editar o projeto (agora usando a prop projectId)
       this.$router.push({ name: 'EditProject', params: { id: this.project.id } });
     },
   },
@@ -167,7 +152,7 @@ export default {
 
 .actions-menu {
   position: absolute;
-  top: 40px; /* Ajuste a posição conforme necessário */
+  top: 40px;
   right: 10px;
   background: white;
   border: 1px solid #ccc;

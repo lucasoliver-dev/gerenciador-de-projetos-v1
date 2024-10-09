@@ -122,13 +122,13 @@ export default defineComponent({
 
     async handleImageUpload(event) {
       const file = event.target.files[0];
-      this.form.image = file; // Armazena o arquivo na propriedade do formulário
+      this.form.image = file;
 
-      // Converte a imagem para base64 e armazena na variável imagePreview
+      // Converte a imagem para base64
       if (file) {
         this.imagePreview = await this.convertImageToBase64(file);
       } else {
-        this.imagePreview = null; // Limpa a pré-visualização se não houver arquivo
+        this.imagePreview = null;
       }
     },
 
@@ -154,10 +154,10 @@ export default defineComponent({
         await schema.validate(this.form, { abortEarly: false });
 
         // Gera um ID único para o projeto
-        const projectId = Date.now(); // ou você pode usar um ID gerado pelo backend
-          
+        const projectId = Date.now();
 
-        // Dispatch do Vuex para adicionar o projeto
+
+
         this.$store.dispatch('addProject', {
           ...this.form,
           id: Date.now(),
@@ -166,14 +166,14 @@ export default defineComponent({
 
         localStorage.setItem(`projectImage_${projectId}`, this.imagePreview);
 
-        // Emitir evento para o pai com os dados do projeto criado
+
         this.$emit('projectCreated', { id: projectId, ...this.form, imageUrl: this.imagePreview });
 
 
-        // Redireciona para a lista de projetos
+
         this.$router.push({ name: 'AddProjectList' });
 
-        // Reseta o formulário
+
         this.form = {
           name: '',
           client: '',
@@ -204,7 +204,7 @@ export default defineComponent({
         if (file) {
           reader.readAsDataURL(file);
         } else {
-          resolve(null); // Retorna null se não houver arquivo
+          resolve(null);
         }
       });
     },

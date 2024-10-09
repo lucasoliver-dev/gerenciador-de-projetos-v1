@@ -26,6 +26,7 @@ export default {
   computed: {
     ...mapGetters(['getProjects']),
     filteredProjects() {
+      // Filtra os projetos com base no termo de pesquisa
       return this.getProjects.filter(project =>
         project.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         project.client.toLowerCase().includes(this.searchTerm.toLowerCase())
@@ -35,6 +36,8 @@ export default {
   methods: {
     handleFavoriteToggle(projectId, isFavorite) {
       console.log(`Project ${projectId} is ${isFavorite ? 'favorited' : 'not favorited'}`);
+      // Emitir evento para o componente pai, se necessário
+      this.$emit('toggle-favorite', projectId, isFavorite);
     },
   },
 };
