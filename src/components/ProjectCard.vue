@@ -1,12 +1,16 @@
 <template>
   <div class="card project-card">
     <div class="card-image"
-      :style="{ backgroundImage: project?.imageUrl ? `url(${project.imageUrl})` : `url('/defalt.png')` }">
+      :style="{ backgroundImage: imageUrl ? `url(${imageUrl})` : `url('/defalt.png')` }">
       <div class="card-actions">
         <button class="favorite-btn" @click="toggleFavorite">
           {{ isFavorite ? '⭐' : '☆' }}
         </button>
-        <button class="actions-btn">⋯</button>
+        <button class="actions-btn" @click="toggleActionsMenu">⋯</button>
+        <div v-if="showActionsMenu" class="actions-menu">
+          <button @click="editProject(project.id)">Editar</button>
+          <button @click="confirmDelete">Remover</button>
+        </div>
       </div>
     </div>
 
@@ -23,26 +27,79 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal de Confirmação -->
+    <ConfirmModal
+      v-if="showConfirmation"
+      @confirm="deleteProject"
+      @cancel="cancelDelete"
+      :show="showConfirmation"
+      :projectName="project?.name" 
+    />
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import ConfirmModal from './ConfirmModal.vue'; // Importe seu componente de modal
+
 export default {
-  props: ['project'],
+  props: {
+    project: {
+      type: Object,
+      required: true,
+    },
+    projectId: {  // Adicionando a prop projectId
+      type: String,
+      required: true,
+    },
+  },
+  components: {
+    ConfirmModal,
+  },
   data() {
     return {
       isFavorite: false,
+      imageUrl: null,
+      showActionsMenu: false,
+      showConfirmation: false,
     };
   },
-  computed: {
-    formattedDates() {
-      return `${this.project?.startDate || ''} - ${this.project?.endDate || ''}`;
+  mounted() {
+  console.log('Project ID recebido:', this.projectId);
+  if (this.project?.id) {
+    const storedImage = localStorage.getItem(`projectImage_${this.project.id}`);
+    if (storedImage) {
+      this.imageUrl = storedImage;
+    } else if (this.project?.imageUrl) {
+      this.imageUrl = this.project.imageUrl;
     }
-  },
+  } else {
+    console.warn('O ID do projeto não está disponível.');
+  }
+},
   methods: {
     toggleFavorite() {
       this.isFavorite = !this.isFavorite;
       this.$emit('toggle-favorite', this.project.id, this.isFavorite);
+    },
+    toggleActionsMenu() {
+      this.showActionsMenu = !this.showActionsMenu; // Alterna a visibilidade do menu de ações
+    },
+    confirmDelete() {
+      this.showConfirmation = true; // Abre a modal de confirmação
+    },
+    cancelDelete() {
+      this.showConfirmation = false; // Fecha a modal de confirmação
+    },
+    ...mapActions(['removeProject']), // Mapeia a ação de remoção do Vuex
+    deleteProject() {
+      this.removeProject(this.project.id); // Chama a ação para remover o projeto
+      this.showConfirmation = false; // Fecha a modal de confirmação
+    },
+    editProject() {
+      // Lógica para editar o projeto (agora usando a prop projectId)
+      this.$router.push({ name: 'EditProject', params: { id: this.project.id } });
     },
   },
 };
@@ -106,6 +163,23 @@ export default {
 .favorite-btn:hover,
 .actions-btn:hover {
   background: rgba(255, 255, 255, 1);
+}
+
+.actions-menu {
+  position: absolute;
+  top: 40px; /* Ajuste a posição conforme necessário */
+  right: 10px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 100;
+}
+
+.actions-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
 }
 
 .card-content {

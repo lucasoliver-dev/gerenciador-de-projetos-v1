@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 interface Project {
   id: number;
   name: string;
+  imageUrl: any;
 }
 
 const store = createStore({
@@ -15,6 +16,7 @@ const store = createStore({
       state.projects.push(project);
       // Salva no localStorage após adicionar o projeto
       localStorage.setItem('projects', JSON.stringify(state.projects));
+      localStorage.setItem(`project_${project.id}_imageUrl`, project.imageUrl);
     },
     UPDATE_PROJECT(state, updatedProject: Project) {
       const index = state.projects.findIndex((p: Project) => p.id === updatedProject.id);
@@ -28,6 +30,7 @@ const store = createStore({
       // Remove o projeto do estado
       state.projects = state.projects.filter((p: Project) => p.id !== projectId);
       localStorage.setItem('projects', JSON.stringify(state.projects));
+      localStorage.removeItem(`project_${projectId}_imageUrl`);
     },
   },
   actions: {

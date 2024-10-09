@@ -1,5 +1,5 @@
 <template>
-  <container class="master-container">
+  <div class="master-container">
     <div class="page-container d-flex flex-column justify-content-center align-items-start">
       <!-- Botão de voltar -->
       <div class="first-content d-flex flex-column justify-content-center align-items-start mt-4">
@@ -58,9 +58,8 @@
             </div>
             <!-- Capa do Projeto -->
             <div class="form-group">
-              <label class="custom-label" :class="{ 'error-label': errors.name }" for="image">
+              <label class="custom-label" for="image">
                 Capa do Projeto
-                <span class="mandatory-label" :class="{ 'error-label': errors.name }"> (Obrigatório)</span>
               </label>
               <div class="upload-wrapper">
                 <div class="upload-icon">
@@ -70,7 +69,7 @@
                   Escolha uma imagem .jpg ou .png no seu dispositivo
                 </div>
                 <div class="upload-button">
-                  <button class="custom-upload-btn" @click="triggerFileInput">
+                  <button type="button" class="custom-upload-btn" @click="triggerFileInput">
                     Selecionar Imagem
                   </button>
                 </div>
@@ -86,13 +85,15 @@
         </div>
       </div>
     </div>
-  </container>
+  </div>
 </template>
 
 <script>
 import * as yup from 'yup';
+import { defineComponent } from 'vue';
+import { useStore } from 'vuex';
 
-export default {
+export default defineComponent({
   data() {
     return {
       form: {
@@ -101,6 +102,7 @@ export default {
         startDate: '',
         endDate: '',
         image: null,
+        imageUrl: '',
       },
       errors: {},
       imagePreview: null,
@@ -118,6 +120,18 @@ export default {
       }
     },
 
+    async handleImageUpload(event) {
+      const file = event.target.files[0];
+      this.form.image = file; // Armazena o arquivo na propriedade do formulário
+
+      // Converte a imagem para base64 e armazena na variável imagePreview
+      if (file) {
+        this.imagePreview = await this.convertImageToBase64(file);
+      } else {
+        this.imagePreview = null; // Limpa a pré-visualização se não houver arquivo
+      }
+    },
+
     async submitForm() {
       const schema = yup.object().shape({
         name: yup.string().required('Nome do Projeto é obrigatório'),
@@ -129,7 +143,7 @@ export default {
           .min(yup.ref('startDate'), 'A data final deve ser posterior à data de início'),
         image: yup
           .mixed()
-          .required('Capa do Projeto é obrigatória')
+          .notRequired()
           .test('fileSize', 'O arquivo é muito grande', value => !value || value.size <= 2000000)
           .test('fileType', 'Apenas arquivos de imagem são permitidos', value =>
             !value || ['image/jpeg', 'image/png', 'image/gif'].includes(value.type)
@@ -138,13 +152,28 @@ export default {
 
       try {
         await schema.validate(this.form, { abortEarly: false });
+
+        // Gera um ID único para o projeto
+        const projectId = Date.now(); // ou você pode usar um ID gerado pelo backend
+          
+
+        // Dispatch do Vuex para adicionar o projeto
         this.$store.dispatch('addProject', {
           ...this.form,
           id: Date.now(),
           imageUrl: this.imagePreview,
         });
 
+        localStorage.setItem(`projectImage_${projectId}`, this.imagePreview);
+
+        // Emitir evento para o pai com os dados do projeto criado
+        this.$emit('projectCreated', { id: projectId, ...this.form, imageUrl: this.imagePreview });
+
+
+        // Redireciona para a lista de projetos
         this.$router.push({ name: 'AddProjectList' });
+
+        // Reseta o formulário
         this.form = {
           name: '',
           client: '',
@@ -167,6 +196,19 @@ export default {
       }
     },
 
+    convertImageToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        if (file) {
+          reader.readAsDataURL(file);
+        } else {
+          resolve(null); // Retorna null se não houver arquivo
+        }
+      });
+    },
+
     goBack() {
       this.$router.push({ name: 'home' });
     },
@@ -175,7 +217,7 @@ export default {
       document.getElementById('image').click();
     },
   }
-};
+});
 </script>
 
 <style scoped>
